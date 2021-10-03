@@ -1,0 +1,85 @@
+---
+title: "week_02_notes"
+author: "Andrew Nalundasan"
+date: "10/2/2021"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# wrangling, subsetting, plotting
+library(tidyverse)
+
+# correlation test of multiple variables
+library(readxl)
+
+
+```
+
+## Parse Time Series
+
++ Chapter 3, page 76
+
+```{r}
+# load in data and name it
+data1 <- read_excel('../02_raw_data/Figure3_1a_1b_fig7_DJI.xls', skip = 1)
+
+# initiate time series
+# transform DJ column to time series
+# monthly data: frequency = 12
+# quarterly data: frequency = 4
+dj <- ts(data1$DJ, frequency = 12, start = 1988)
+
+# log difference of Dow Jones
+lddj <- diff(log(dj))
+```
+
+
+
+## Plot Time Series
+
+```{r}
+# plot dj
+plot(dj, col='blue', main='Dow Jones Index Level', ylab='DJ index', xlab='month')
+
+# plot histogram
+hist(dj)
+
+# auto correlation function
+# 20 lags
+acf(dj, lag.max = 20, main='DJ Index')
+
+# see values only and no plot
+acf(dj, lag.max = 20, plot = FALSE)
+
+
+```
+
+```{r}
+# PACF
+pacf(dj, lag.max = 5)
+
+# values only
+pacf(dj, lag.max = 5, plot = FALSE)
+```
+```{r}
+# log difference ACF
+acf(lddj, lag.max = 20, main = 'log diff DJ index')
+
+# log differenc PACF
+pacf(lddj, lag.max = 20, main = 'log diff DJ index')
+
+# NEED TO LEARN HOW TO INTERPRET THE COEFFICIENTS!!
+```
+
+
+## Calculate First difference of log transformation
+
+## Calculate ACF and PACF
+
